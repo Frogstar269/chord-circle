@@ -1,14 +1,16 @@
 
 var SCREEN_WIDTH = 1024;
 var SCREEN_HEIGHT = 768;
-var MARKER_RADIUS = 70;
+var MARKER_RADIUS = 60;
+var MARKER_RADIUS_min = 40;
 var MARKER_STROKE_WIDTH = 8;
 
-var TRACK_NUM = 12;
-var ICON_INTERVAL_DEGREE = 360 / (TRACK_NUM); // 22.5
+var TRACK_NUM = 24;
+var ICON_INTERVAL_DEGREE = 360 / (TRACK_NUM/2); // 22.5
 
 var MARKER_APPEARANCE_DELTA = 1000; // ノーツ出現時間(ms): 大きくするほど低速
-var UNIT_ARRANGE_RADIUS = SCREEN_WIDTH * 0.41 | 0;
+var UNIT_ARRANGE_RADIUS = SCREEN_WIDTH * 0.31 | 0;
+var UNIT_ARRANGE_RADIUS_min = SCREEN_WIDTH * 0.21 | 0;
 var MUSIC_START_DELAY = 2000;
 
 var inShift = 0;
@@ -53,22 +55,22 @@ var KEYCODE_TO_KEYDATA_MAP_ctrl = {
   66: {key:"b♭", id:10},
 };
 var KEYCODE_TO_KEYDATA_MAP_shift = {
-  67: {key:"c", id:20},
-  71: {key:"g", id:21},
-  68: {key:"d", id:22},
-  65: {key:"a", id:23},
-  69: {key:"e", id:24},
+  67: {key:"c⒨", id:21},
+  71: {key:"g⒨", id:22},
+  68: {key:"d⒨", id:23},
+  65: {key:"a⒨", id:12},
+  69: {key:"e⒨", id:13},
   // 32: {key:"sp", id:4},
-  66: {key:"b", id:25},
-  70: {key:"f", id:31},
+  66: {key:"b⒨", id:14},
+  70: {key:"f⒨", id:20},
 };
 var KEYCODE_TO_KEYDATA_MAP_ctrl_shift = {
   // 32: {key:"sp", id:4},
-  71: {key:"g♭", id:26},
-  68: {key:"d♭", id:27},
-  65: {key:"a♭", id:28},
-  69: {key:"e♭", id:29},
-  66: {key:"b♭", id:30},
+  71: {key:"g♭⒨", id:15},
+  68: {key:"d♭⒨", id:16},
+  65: {key:"a♭⒨", id:17},
+  69: {key:"e♭⒨", id:18},
+  66: {key:"b♭⒨", id:19},
 };
 var INDEX_TO_KEY_MAP = {};
 KEYCODE_TO_KEYDATA_MAP.forIn(function(key, val) {
@@ -86,11 +88,11 @@ KEYCODE_TO_KEYDATA_MAP_ctrl_shift.forIn(function(key, val) {
 
 var ASSETS = {
   sound: {
-    music: "./assets/grandfather-clock.mp3",
+    music: "./assets/チョウチン少女_chci.mp3",
     ring: "./assets/tamborine.mp3",
   },
   json: {
-    beatmap: "./assets/grandfather-clock.json"
+    beatmap: "./assets/chochin.json"
   }
 };
 

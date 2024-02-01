@@ -34,19 +34,36 @@ phina.define('MainScene', {
     .setPosition(gx.center(), gy.center())
     .addChildTo(this);
     for (var i = 0; i < TRACK_NUM; i++) {
-      var label = INDEX_TO_KEY_MAP[i].toUpperCase();
-      var rad = (i * ICON_INTERVAL_DEGREE).toRadian();
-      var icon = UnitIcon(i, label)
-      .setPosition(
-        Math.sin(-rad+Math.PI) * UNIT_ARRANGE_RADIUS,
-        Math.cos(-rad+Math.PI) * UNIT_ARRANGE_RADIUS
-      )
-      .addChildTo(iconGroup);
-
-      // タップ・クリック判定
-      icon.onpointstart = function() {
-        self.judge(this); // 自分を渡す
-      };
+      if(i<12){
+        var label = INDEX_TO_KEY_MAP[i].toUpperCase();
+        var rad = (i * ICON_INTERVAL_DEGREE).toRadian();
+        var icon = UnitIcon(i, label)
+        .setPosition(
+          Math.sin(-rad+Math.PI) * UNIT_ARRANGE_RADIUS,
+          Math.cos(-rad+Math.PI) * UNIT_ARRANGE_RADIUS
+        )
+        .addChildTo(iconGroup);
+  
+        // タップ・クリック判定
+        icon.onpointstart = function() {
+          self.judge(this); // 自分を渡す
+        };
+      }
+      else{
+        var label = INDEX_TO_KEY_MAP[i].toUpperCase();
+        var rad = (i * ICON_INTERVAL_DEGREE).toRadian();
+        var icon = UnitIcon_min(i, label)
+        .setPosition(
+          Math.sin(-rad+Math.PI) * UNIT_ARRANGE_RADIUS_min,
+          Math.cos(-rad+Math.PI) * UNIT_ARRANGE_RADIUS_min
+        )
+        .addChildTo(iconGroup);
+  
+        // タップ・クリック判定
+        icon.onpointstart = function() {
+          self.judge(this); // 自分を渡す
+        };
+      }
     }
     // キーボード判定
     this.on('keydown', function(e) {
@@ -95,8 +112,13 @@ phina.define('MainScene', {
     .setPosition(iconGroup.x, iconGroup.y)
     .addChildTo(this);
     beatmap.notes.forEach(function(note) {
-      TargetMarker(note.targetTime, note.track)
-      .addChildTo(self.markerGroup)
+      if(note.track<12){
+        TargetMarker(note.targetTime, note.track)
+        .addChildTo(self.markerGroup)
+      }else{
+        TargetMarker_min(note.targetTime, note.track)
+        .addChildTo(self.markerGroup)
+      }
     })
 
     // score表示
@@ -108,7 +130,7 @@ phina.define('MainScene', {
       strokeWidth: 2,
       fontSize: 50,
     })
-    .setPosition(gx.center(), gy.span(3))
+    .setPosition(gx.center(), gy.span(5))
     .addChildTo(this)
     .on('enterframe', function() {
       this.text = self.totalScore;
@@ -172,7 +194,14 @@ phina.define('MainScene', {
         // マーカーの位置比率や縮小率（倍率）を計算する
         // ratioはアイコンに近いほど1.0に近づく
         var ratio = (time - (m.targetTime - MARKER_APPEARANCE_DELTA)) / MARKER_APPEARANCE_DELTA;
-        var distance = UNIT_ARRANGE_RADIUS * ratio;
+        
+        console.log(m.targetTime);
+        if(m.trackId<12){
+          var distance = UNIT_ARRANGE_RADIUS * ratio;
+        }else{
+          var distance = UNIT_ARRANGE_RADIUS_min * ratio;
+        }
+        
 
         m.setVisible(true)
         .setPosition(
